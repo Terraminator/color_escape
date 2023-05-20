@@ -10,7 +10,7 @@ Simple example for using ansi escape codes in c++
  \______| \______/  |_______| \______/  | _| `._____| _____|_______|_______/     \______/__/     \__\ | _|      |_______|
                                                      |______|                                                            
 </pre>
-
+![image](https://github.com/Terraminator/color_escape/blob/main/works.png?raw=true)
 ### Setup
 First of all you have to compile the script just open the .sln file with Visual Studio and press run, then the Ide will do the work for you and compiles automaticaly.
 If you run this script you will see the string "Hello World" in different colors!
