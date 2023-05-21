@@ -1,11 +1,12 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <chrono>
-#include <thread>
+#include <windows.h>
 
 using namespace std;
 
+
+HANDLE hc;
 
 int ansi_colors[32]{
     //foreground
@@ -49,11 +50,20 @@ int ansi_colors[32]{
 void print_color(int value) {
     stringstream ss;
     ss << "\033[1;" << ansi_colors[value] << "m" << "Hello World!" << "\033[0m";
-    cout << ss.str() << endl;
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    DWORD dwbw = 0;
+    printf("%i\n%s\r\n", value, ss.str().c_str());
 }
 
 int main() {
+    //fix issue for mingw #https://stackoverflow.com/questions/63426368/enabling-ansi-color-support-in-windows-console-with-custom-screen-buffer-c
+    HANDLE hconsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    hc = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
+    SetConsoleActiveScreenBuffer(hc);
+    DWORD dw_mode = 0;
+    GetConsoleMode(hc, &dw_mode);
+    dw_mode |= 0x0004;//ENABLE_VIRTUAL_TERMINAL_PROCESSING
+    SetConsoleMode(hc, dw_mode);
+
     //print foreground Colors
     for (int value{ 0 }; value < 16; value++) {
         print_color(value);
@@ -62,6 +72,5 @@ int main() {
     for (int value{ 16 }; value < 32; value++) {
         print_color(value);
     }
-
     return(0);
 }
